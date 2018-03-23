@@ -6,12 +6,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 ########## function-based views
 
 # from .views import tag_list,tag_detail
-#
+
 # urlpatterns = [
 #     re_path(r'^tags/$',tag_list),
 #     re_path(r'^tags/(?P<pk>[0-9]+)/$',tag_detail),
-# ]
 #
+# ]
+
 
 
 
@@ -21,7 +22,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 # from .views import TagList,TagDetail
 # from .views import UserList,UserDetail
 # from .views import api_root
-
+#
 # urlpatterns = [
 #     re_path(r'^tags/$', TagList.as_view()),
 #     re_path(r'^tags/(?P<pk>[0-9]+)/$', TagDetail.as_view()),
@@ -31,7 +32,11 @@ from rest_framework.urlpatterns import format_suffix_patterns
 #
 #     re_path(r'^$',api_root),
 # ]
-
+#
+# urlpatterns += [
+#     re_path(r'^api/tag?tag_id=[0-9]+/$', TagList.as_view()),
+# ]
+#
 # urlpatterns = format_suffix_patterns(urlpatterns)
 
 
@@ -50,7 +55,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 ######### ViewSet
 
-from .views import TagViewSet,UserViewSet,api_root
+# from .views import TagViewSet,UserViewSet,api_root
 
 # tag_list = TagViewSet.as_view({
 #     'get': 'list',
@@ -85,13 +90,28 @@ from .views import TagViewSet,UserViewSet,api_root
 
 
 ######## routers
-from django.conf.urls import include
-from rest_framework.routers import DefaultRouter
+# from django.conf.urls import include
+# from rest_framework.routers import DefaultRouter
+#
+# router = DefaultRouter()
+# router.register(r'tags', TagViewSet)
+# router.register(r'users', UserViewSet)
+#
+# urlpatterns = [
+#     re_path(r'^', include(router.urls)),
+# ]
 
-router = DefaultRouter()
-router.register(r'tags', TagViewSet)
-router.register(r'users', UserViewSet)
+
+
+######### query url
+
+from .views import TagList,TagDetail
+
 
 urlpatterns = [
-    re_path(r'^', include(router.urls)),
+    re_path(r'^tags/$', TagList.as_view()),
+    # re_path(r'^tags/(?P<pk>[0-9]+)/$', TagDetail.as_view()),
+    re_path(r'^tags/detail/$', TagDetail.as_view()),
+
 ]
+

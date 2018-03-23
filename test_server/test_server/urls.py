@@ -29,8 +29,8 @@ schema_view = get_schema_view(title='Test API')
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
-    re_path(r'^schema/$', schema_view),
-    re_path(r'^docs/', include_docs_urls(title='API DOC')),
+    # re_path(r'^schema/$', schema_view),
+    # re_path(r'^docs/', include_docs_urls(title='API DOC')),
     re_path(r'^',include('test_server.apps.tag.urls')),
     re_path(r'^api-auth/', include('rest_framework.urls')),
 ]

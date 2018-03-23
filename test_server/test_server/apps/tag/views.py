@@ -25,6 +25,8 @@ from .serializers import TagSerializer
 #             return JsonResponse(serializer.data, status=201)
 #         return JsonResponse(serializer.errors, status=400)
 #
+#
+#
 # @csrf_exempt
 # def tag_detail(request, pk):
 #
@@ -102,7 +104,7 @@ from rest_framework.response import Response
 
 ######### class-based views
 
-# from rest_framework.views import APIView
+from rest_framework.views import APIView
 #
 #
 # class TagList(APIView):
@@ -191,27 +193,38 @@ from rest_framework import generics
 
 
 ########## using generic class-based views
-
-from rest_framework import permissions
-from .permissions import IsOwnerOrReadOnly
-
+#
+# from rest_framework import permissions
+# from .permissions import IsOwnerOrReadOnly
+#
 # class TagList(generics.ListCreateAPIView):
+#     """
+#         get:
+#         返回所有的tag
+#
+#         post:
+#         创建一个新的tag
+#     """
+#
 #     queryset = Tag.objects.all()
 #     serializer_class = TagSerializer
 #     permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
 #
-#
 #     def perform_create(self, serializer):
 #         serializer.save(owner=self.request.user)
+#
 #
 # class TagDetail(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Tag.objects.all()
 #     serializer_class = TagSerializer
 #     permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
 #
-from django.contrib.auth.models import User
-from .serializers import UserSerializer
 #
+#
+#
+#
+# from django.contrib.auth.models import User
+# from .serializers import UserSerializer
 #
 # class UserList(generics.ListAPIView):
 #     queryset = User.objects.all()
@@ -220,19 +233,19 @@ from .serializers import UserSerializer
 # class UserDetail(generics.RetrieveAPIView):
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
-
-
-
-from rest_framework.reverse import reverse
-
-
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'tags': reverse('tag-list', request=request, format=format)
-    })
-
+#
+#
+#
+# from rest_framework.reverse import reverse
+#
+#
+# @api_view(['GET'])
+# def api_root(request, format=None):
+#     return Response({
+#         'users': reverse('user-list', request=request, format=format),
+#         'tags': reverse('tag-list', request=request, format=format)
+#     })
+#
 
 
 
@@ -241,24 +254,70 @@ def api_root(request, format=None):
 
 ############ ViewSet
 
-from rest_framework import viewsets
+# from rest_framework import viewsets
+#
+# class UserViewSet(viewsets.ReadOnlyModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#
+# class TagViewSet(viewsets.ModelViewSet):
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+#
+#
+#     queryset = Tag.objects.all()
+#     serializer_class = TagSerializer
+#
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+#                           IsOwnerOrReadOnly)
+#
+#     def perform_create(self, serializer):
+#         serializer.save(owner=self.request.user)
 
 
-class TagViewSet(viewsets.ModelViewSet):
-    """
-        Return a list of all the existing tag.
-    """
 
 
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+######## query url
 
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+class TagList(APIView):
+
+    def get(self, request, format=None):
+        tag = Tag.objects.all()
+        serializer = TagSerializer(tag, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TagSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TagDetail(APIView):
+
+    def get_object(self,is_publish,priority):
+        try:
+            return Tag.objects.filter(is_publish=is_publish,priority=priority)
+        except:
+            return Response(status.HTTP_404_NOT_FOUND)
+
+
+    def get(self, request, format=None):
+        tags = self.get_object(self.request.query_params['is_publish'],self.request.query_params['priority'])
+        serializer = TagSerializer(tags,many=True)
+        return Response(serializer.data)
+
+    def put(self, request, format=None):
+        tag = self.get_object(self.request.query_params['tagid'])
+        serializer = TagSerializer(tag, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, format=None):
+        tag = self.get_object(self.request.query_params['tagid'])
+        tag.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

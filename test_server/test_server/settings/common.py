@@ -157,3 +157,10 @@ MEDIA_URL = '/media/'
 # DJANGO_LOGGING = {
 #     "CONSOLE_LOG": True
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}

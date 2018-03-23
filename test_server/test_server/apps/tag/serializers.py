@@ -45,17 +45,41 @@ from django.contrib.auth.models import User
 
 #########  HyperlinkedModelSerializer
 
-class TagSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.id')
+# class TagSerializer(serializers.HyperlinkedModelSerializer):
+#     # owner = serializers.ReadOnlyField(source='owner.id')
+#
+#     class Meta:
+#         model = Tag
+#         fields = ('tag_id', 'title', 'priority', 'is_publish', 'owner','url')
+#
+#
+# class UserSerializer(serializers.HyperlinkedModelSerializer):
+#     tags = serializers.HyperlinkedRelatedField(many=True, view_name='tag-detail',read_only=True)
+#
+#     class Meta:
+#         model = User
+#         fields = ('url', 'id', 'username', 'tags')
 
-    class Meta:
-        model = Tag
-        fields = ('tag_id', 'title', 'priority', 'is_publish', 'owner','url')
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    tags = serializers.HyperlinkedRelatedField(many=True, view_name='tag-detail',read_only=True)
+
+
+
+
+##########   nested objects
+
+class UserSerializer(serializers.ModelSerializer):
+    # tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all())
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'tags')
+        fields = ('id', 'username')
+
+class TagSerializer(serializers.ModelSerializer):
+    # owner = UserSerializer()
+    class Meta:
+        model = Tag
+        fields = ('tag_id','title','priority','is_publish','owner')
+        depth = 1
+
+
