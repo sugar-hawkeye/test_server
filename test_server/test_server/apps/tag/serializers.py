@@ -77,9 +77,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TagSerializer(serializers.ModelSerializer):
     # owner = UserSerializer()
+
+
+
     class Meta:
         model = Tag
         fields = ('tag_id','title','priority','is_publish','owner')
-        depth = 1
+        depth = 2
 
+        # list_serializer_class = ResponseSerializer
 

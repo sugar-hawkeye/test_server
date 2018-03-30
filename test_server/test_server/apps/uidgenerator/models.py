@@ -5,7 +5,7 @@ from django.core import exceptions
 from django.db import models
 from django.db.models import BigIntegerField
 
-from test_server.apps.uidgenerator import settings
+from uidgenerator import settings
 
 class UIDField(models.Field):
     empty_strings_allowed = False

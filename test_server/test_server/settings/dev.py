@@ -32,6 +32,9 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
 ]
 
-INTERNAL_IPS = ("127.0.0.1",)
+# INTERNAL_IPS = ("127.0.0.1",)
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+CERT_PEM = os.path.join(MEDIA_ROOT, 'PushCert.pem')
+KEY_PEM = os.path.join(MEDIA_ROOT, 'PushKey.pem')

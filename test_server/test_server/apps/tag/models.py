@@ -3,7 +3,7 @@
 from django.db import models
 
 from django.contrib.auth.models import User
-from test_server.apps.uidgenerator.models import UIDField
+from uidgenerator.models import UIDField
 
 class Tag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

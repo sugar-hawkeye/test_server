@@ -19,25 +19,25 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 ########## class-based views
 
-# from .views import TagList,TagDetail
+from .views import TagList,TagDetail
 # from .views import UserList,UserDetail
 # from .views import api_root
-#
-# urlpatterns = [
-#     re_path(r'^tags/$', TagList.as_view()),
-#     re_path(r'^tags/(?P<pk>[0-9]+)/$', TagDetail.as_view()),
-#
-#     re_path(r'^users/$',UserList.as_view()),
-#     re_path(r'^users/(?P<pk>[0-9]+)/$',UserDetail.as_view()),
-#
-#     re_path(r'^$',api_root),
-# ]
-#
-# urlpatterns += [
-#     re_path(r'^api/tag?tag_id=[0-9]+/$', TagList.as_view()),
-# ]
-#
-# urlpatterns = format_suffix_patterns(urlpatterns)
+
+urlpatterns = [
+    re_path(r'^tags/$', TagList.as_view()),
+    re_path(r'^tags/(?P<pk>[0-9]+)/$', TagDetail.as_view()),
+
+    # re_path(r'^users/$',UserList.as_view()),
+    # re_path(r'^users/(?P<pk>[0-9]+)/$',UserDetail.as_view()),
+    #
+    # re_path(r'^$',api_root),
+]
+
+urlpatterns += [
+    re_path(r'^api/tag?tag_id=[0-9]+/$', TagList.as_view()),
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
 
 
 
@@ -105,13 +105,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 ######### query url
 
-from .views import TagList,TagDetail
-
-
-urlpatterns = [
-    re_path(r'^tags/$', TagList.as_view()),
-    # re_path(r'^tags/(?P<pk>[0-9]+)/$', TagDetail.as_view()),
-    re_path(r'^tags/detail/$', TagDetail.as_view()),
-
-]
+# from .views import TagList,TagDetail
+#
+#
+# urlpatterns = [
+#     re_path(r'^tags/$', TagList.as_view()),
+#     # re_path(r'^tags/(?P<pk>[0-9]+)/$', TagDetail.as_view()),
+#     re_path(r'^tags/detail/$', TagDetail.as_view()),
+#
+# ]
 
